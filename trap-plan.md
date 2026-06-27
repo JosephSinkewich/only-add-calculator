@@ -199,9 +199,9 @@ The View should expose a small interface, conceptually similar to:
 ```csharp
 public interface ICalculatorView
 {
-    event EventHandler ViewLoaded;
-    event EventHandler ResultRequested;
-    event EventHandler ViewClosing;
+    event EventHandler OnViewLoaded;
+    event EventHandler OnResultRequested;
+    event EventHandler OnViewClosing;
 
     string Input { get; set; }
     void SetHistory(IReadOnlyList<HistoryItemViewModel> history);
@@ -229,7 +229,7 @@ The exact names may change during implementation, but the idea should remain:
 5. `MainWindowFactory` creates `CalculatorPresenter`, passing `MainWindow` as `ICalculatorView`.
 6. `CalculatorPresenter` subscribes to `MainWindow` events through `ICalculatorView`.
 7. `App` shows `MainWindow`.
-8. On window load, `MainWindow` raises the View loaded event.
+8. On window load, `MainWindow` raises the `OnViewLoaded` event.
 9. Presenter handles the event and initializes the screen.
 10. Presenter loads saved application state from `IAppStateStore`.
 11. Presenter sets saved input and history on the View.
@@ -238,7 +238,7 @@ The exact names may change during implementation, but the idea should remain:
 
 1. User enters any text into the input field.
 2. User clicks `Result`.
-3. View raises the result requested event.
+3. View raises the `OnResultRequested` event.
 4. Presenter handles the event and reads `View.Input`.
 5. Presenter passes the input to Core calculation logic.
 6. Core returns a structured calculation result.
@@ -252,7 +252,7 @@ The exact names may change during implementation, but the idea should remain:
 ### Closing
 
 1. User closes the window.
-2. View raises the View closing event.
+2. View raises the `OnViewClosing` event.
 3. Presenter handles the event and saves current input and current history through `IAppStateStore`.
 
 According to the specification, application state is saved when the application closes.
