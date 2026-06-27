@@ -4,7 +4,7 @@ namespace OnlyAddCalculator.Core.Tests;
 
 public sealed class AdditionCalculatorTests
 {
-    private readonly AdditionCalculator calculator = new();
+    private readonly AdditionCalculator _calculator = new();
 
     [Theory]
     [InlineData("54+21", "75")]
@@ -15,7 +15,7 @@ public sealed class AdditionCalculatorTests
     [InlineData("999999999999999999999999999999+1", "1000000000000000000000000000000")]
     public void Calculate_ReturnsSum_ForValidAdditionExpression(string expression, string expectedResult)
     {
-        var result = calculator.Calculate(expression);
+        var result = _calculator.Calculate(expression);
 
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
@@ -37,7 +37,7 @@ public sealed class AdditionCalculatorTests
     [InlineData("55")]
     public void Calculate_ReturnsFailure_ForInvalidExpression(string? expression)
     {
-        var result = calculator.Calculate(expression);
+        var result = _calculator.Calculate(expression);
 
         Assert.False(result.IsSuccess);
         Assert.Null(result.Value);
