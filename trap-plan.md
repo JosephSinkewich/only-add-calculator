@@ -488,7 +488,6 @@ Expected resource keys:
 - `AppTitle`
 - `ResultButtonText`
 - `InvalidInputMessage`
-- `InvalidInputDialogTitle`
 - `HistoryErrorResult`
 
 Important localization rules:
