@@ -314,6 +314,7 @@ Screenshot ambiguity:
 - The specification references figure 5 for the error dialog.
 - The dialog has no title text.
 - The dialog uses a white card; the black screenshot background is not part of the application UI.
+- The dialog must have a visible border so it does not visually merge with the main white window behind it.
 - The dialog has a blue `GOT IT` button.
 - The main window must not be explicitly hidden while the error dialog is shown.
 - Use a modal WPF dialog owned by the main window.
