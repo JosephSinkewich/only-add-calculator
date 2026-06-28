@@ -10,6 +10,13 @@ It is written for two readers:
 
 Before making architectural or implementation changes, the AI assistant should read this document and keep the solution aligned with it unless the developer explicitly updates the plan.
 
+## Implementation Status
+
+Implemented.
+
+The planned solution structure, Core calculation rules, Application presenter workflow, JSON persistence, localization resources, WPF composition root, WPF UI, and focused test projects have been created.
+The explanatory `README.md` is intentionally left for the developer to write.
+
 ## Assignment Summary
 
 Build a Windows 11 calculator application that performs addition only.
