@@ -296,13 +296,14 @@ Invalid input should produce two user-visible effects:
 
 The Core should not know about the message text.
 The Presenter should decide that an invalid result requires a user notification.
-The WPF View should display the notification, likely using `MessageBox`.
+The WPF View should display the notification with a custom WPF dialog matching Appendix A figure 5.
 The WPF View should get the message text from `OnlyAddCalculator.Localization`.
 
 Recommended message text:
 
 ```text
-Please check the information you just entered.
+Please check the expression
+you just entered
 ```
 
 The UI text should stay in English where the specification screenshots use English.
@@ -311,9 +312,11 @@ The exact final wording should match the screenshot from `TZ_Senior_2026_.pdf`.
 Screenshot ambiguity:
 
 - The specification references figure 5 for the error dialog.
+- The dialog has no title text.
+- The dialog uses a white card; the black screenshot background is not part of the application UI.
+- The dialog has a blue `GOT IT` button.
 - The main window must not be explicitly hidden while the error dialog is shown.
-- Use a normal modal message box owned by the main window.
-- If the screenshot shows only the dialog, treat it as an illustration of the focused modal dialog, not as a requirement to hide the main window.
+- Use a modal WPF dialog owned by the main window.
 
 ## Persistence Model
 
@@ -395,30 +398,39 @@ The display string should be derived from the model, not used as the storage for
 ## History Display
 
 The specification says the output area receives the result expression and receives `Error` for invalid input.
-The extracted PDF text does not provide a machine-readable exact history line format from the screenshots.
+Appendix A screenshots define the visible history format and ordering.
 
 Planned display format:
 
 ```text
-54+21 = 75
-45+-88 = Error
+54+21=75
+45+-88=ERROR
 ```
 
-History ordering should be verified against Appendix A screenshots during UI implementation.
-If the screenshots are not decisive, prefer appending new operations after older operations, because the specification says a result is added to the output field.
-New history entries should appear at the bottom.
-After adding a history entry, the UI should scroll to the latest entry.
+Persisted/application history may remain chronological.
+The WPF display must match Appendix A:
+
+- New history entries appear at the top.
+- Older history entries move downward.
+- The visible history lines are right-aligned and blue.
+- Invalid operations display `ERROR` in uppercase.
+- After adding a history entry, the UI should scroll to the top/latest entry.
 
 Persist history structurally, not as these display strings.
 The display formatter in the WPF layer should use localization resources for `Error`.
 
 ## UI Layout
 
-Use a minimal WPF layout that matches the assignment:
+Use a WPF layout that visually matches Appendix A screenshots from `TZ_Senior_2026_.pdf`:
 
-- Input `TextBox` at the top.
-- `Result` button near the input.
-- Operation history below the input controls.
+- The black background in Appendix A screenshots is not part of the application UI.
+- The calculator content uses a white card/window surface.
+- The card title is `ONLY ADD CALCULATOR`.
+- The input is a single underline-style text field.
+- Empty input shows the italic placeholder `Enter an equation...`.
+- The underline is grey when idle and blue when focused.
+- Operation history is shown below the input and above the button.
+- The `RESULT` button is a full-width blue button at the bottom of the card.
 - History area must be scrollable.
 
 Use `ItemsControl` inside `ScrollViewer` for history rendering.
@@ -435,27 +447,18 @@ Window sizing behavior:
 
 - Use `Grid` as the main layout container.
 - Avoid absolute positioning and `Canvas`.
-- Use two main rows:
-  - Row 0: `Auto` height for input and button.
-  - Row 1: `*` height for scrollable history.
-- In the input row, use columns:
-  - Column 0: `*` width for the input `TextBox`.
-  - Column 1: `Auto` width for the `Result` button.
-- The input `TextBox` should stretch horizontally.
-- The history area should stretch horizontally and vertically.
-- Set reasonable `MinWidth` and `MinHeight` on the main window.
-- The `Result` button may keep a fixed or content-based width.
+- The main window should use the standard Windows frame so the user can close the application normally.
+- The content/card should grow vertically as history entries are added.
+- The input, history, and button should stretch across the card content width.
 - The main window should not be user-resizable.
 - Window size is controlled by the application.
 - Disable manual resizing in WPF, for example with an appropriate `ResizeMode`.
-- Width can remain fixed or application-controlled.
-- Height should be application-controlled according to visible history growth behavior.
 - Keep the `Result` button enabled even when the input is empty.
 - Empty input should go through the normal calculation flow and produce `Error`.
 - Do not add Enter-to-submit behavior unless the developer explicitly requests it later.
 - Do not add history copying behavior unless the developer explicitly requests it later.
 - Do not persist window size or position because the specification does not require it.
-- Do not add custom theming beyond a clean minimal WPF layout.
+- Do not add custom styling beyond what is required to match Appendix A screenshots.
 
 History growth behavior:
 
@@ -495,6 +498,7 @@ Expected resource keys:
 - `AppTitle`
 - `ResultButtonText`
 - `InvalidInputMessage`
+- `InvalidInputButtonText`
 - `HistoryErrorResult`
 
 Important localization rules:
@@ -606,7 +610,7 @@ Should not cover:
 - XAML rendering.
 - Real WPF windows.
 - Mouse or keyboard automation.
-- Real `MessageBox` behavior.
+- Real WPF invalid input dialog behavior.
 - Exhaustive parser validation already covered by Core unit tests.
 
 Keep integration tests small and scenario-focused.
@@ -782,15 +786,17 @@ When continuing this project, the AI assistant should:
 - Store production state in `%AppData%\OnlyAddCalculator\state.json`.
 - Keep the production state directory name and state file name in WPF application resources.
 - Include `schemaVersion: 1` in persisted JSON.
-- Append new history entries at the bottom and scroll to the latest entry.
+- Display newest history entries at the top in the WPF UI and scroll to the latest/top entry.
 - Grow the visible history area until the configured visible history row limit is reached, then use scrolling.
 - Store the visible history row limit in WPF resources.
 - Keep `Result` enabled for empty input; empty input produces `Error`.
 - Do not persist window size or position.
 - Make the main window non-resizable by the user; application code controls the size.
+- Keep the standard Windows main window frame so the application can be closed with the title bar close button or `Alt+F4`.
 - Do not add Enter-to-submit behavior by default.
 - Do not add logging by default.
 - Do not hide the main window when showing the invalid input message.
+- Use a custom WPF invalid input dialog matching Appendix A, not the default system `MessageBox`.
 - Use `Microsoft.Extensions.DependencyInjection` for composition.
 - Keep DI registration in a WPF-side `ServiceConfiguration` class.
 - Keep `App.xaml.cs` thin and focused on WPF startup/shutdown lifecycle.
