@@ -332,14 +332,14 @@ Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
 
 Production path construction belongs to the WPF composition root or a small WPF-side configuration component.
 The JSON persistence implementation should accept an explicit file path or options object so tests can use temporary directories.
-Path segment strings must be defined as constants, not repeated inline:
+Path segment strings must be defined in WPF application resources, not repeated inline and not placed in localization `.resx` resources:
 
-```csharp
-private const string AppDataDirectoryName = "OnlyAddCalculator";
-private const string StateFileName = "state.json";
+```xml
+<sys:String x:Key="StateStorageDirectoryName">OnlyAddCalculator</sys:String>
+<sys:String x:Key="StateStorageFileName">state.json</sys:String>
 ```
 
-Use these constants when building the production state path.
+Use these WPF resource values when building the production state path.
 
 On the first launch, or when no valid state can be loaded, the application should start with:
 
@@ -780,6 +780,7 @@ When continuing this project, the AI assistant should:
 - Do not add automated WPF tests by default.
 - Save application state on application close, as required by the specification.
 - Store production state in `%AppData%\OnlyAddCalculator\state.json`.
+- Keep the production state directory name and state file name in WPF application resources.
 - Include `schemaVersion: 1` in persisted JSON.
 - Append new history entries at the bottom and scroll to the latest entry.
 - Grow the visible history area until the configured visible history row limit is reached, then use scrolling.
