@@ -335,14 +335,21 @@ Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
 
 Production path construction belongs to the WPF composition root or a small WPF-side configuration component.
 The JSON persistence implementation should accept an explicit file path or options object so tests can use temporary directories.
-Path segment strings must be defined in WPF application resources, not repeated inline and not placed in localization `.resx` resources:
+Path segment strings must be defined in a WPF-side `.resx` resource set with generated strongly typed accessors, not repeated inline and not placed in localization `.resx` resources:
 
-```xml
-<sys:String x:Key="StateStorageDirectoryName">OnlyAddCalculator</sys:String>
-<sys:String x:Key="StateStorageFileName">state.json</sys:String>
+```text
+OnlyAddCalculator.Wpf/
+  Resources/
+    StorageResources.resx
+    StorageResources.Designer.cs
 ```
 
-Use these WPF resource values when building the production state path.
+Expected resource keys:
+
+- `StateStorageDirectoryName`
+- `StateStorageFileName`
+
+Use the generated `StorageResources` properties when building the production state path.
 
 On the first launch, or when no valid state can be loaded, the application should start with:
 
@@ -463,13 +470,11 @@ Window sizing behavior:
 
 History growth behavior:
 
-- Match the specification screenshots: as history entries are added, the visible window/history area may grow until a defined visible history row limit is reached.
+- Match the specification screenshots: as history entries are added, the visible window/history area may grow until the configured maximum history area height is reached.
 - The user should not manually resize the window; this growth is controlled by the application.
-- After the visible history row limit is reached, the history area should stop growing and the vertical scrollbar should be used.
-- Define the limit by number of visible history rows, not by an arbitrary pixel height.
-- Store the visible history row limit in WPF resources, because it is a UI layout setting.
+- After the maximum history area height is reached, the history area should stop growing and the vertical scrollbar should be used.
+- Store the history item height and maximum history area height in WPF resources, because they are UI layout settings.
 - Do not store this numeric layout setting in localization `.resx`; localization resources are for user-facing text.
-- The implementation may convert the configured row count into a maximum history area height using the expected item height.
 
 ## Localization
 
@@ -785,11 +790,11 @@ When continuing this project, the AI assistant should:
 - Do not add automated WPF tests by default.
 - Save application state on application close, as required by the specification.
 - Store production state in `%AppData%\OnlyAddCalculator\state.json`.
-- Keep the production state directory name and state file name in WPF application resources.
+- Keep the production state directory name and state file name in WPF `.resx` resources with generated strongly typed accessors.
 - Include `schemaVersion: 1` in persisted JSON.
 - Display newest history entries at the top in the WPF UI and scroll to the latest/top entry.
-- Grow the visible history area until the configured visible history row limit is reached, then use scrolling.
-- Store the visible history row limit in WPF resources.
+- Grow the visible history area until the configured maximum history area height is reached, then use scrolling.
+- Store history item height and maximum history area height in WPF resources.
 - Keep `Result` enabled for empty input; empty input produces `Error`.
 - Do not persist window size or position.
 - Make the main window non-resizable by the user; application code controls the size.
