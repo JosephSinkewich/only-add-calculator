@@ -425,7 +425,8 @@ Use a WPF layout that visually matches Appendix A screenshots from `TZ_Senior_20
 
 - The black background in Appendix A screenshots is not part of the application UI.
 - The calculator content uses a white card/window surface.
-- The card title is `ONLY ADD CALCULATOR`.
+- The app title `ONLY ADD CALCULATOR` is shown only in the standard window title bar.
+- Do not duplicate the title inside the calculator content.
 - The input is a single underline-style text field.
 - Empty input shows the italic placeholder `Enter an equation...`.
 - The underline is grey when idle and blue when focused.
