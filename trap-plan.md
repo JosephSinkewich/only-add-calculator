@@ -476,10 +476,17 @@ Use the standard .NET `.resx` resource mechanism:
 ```text
 Resources/
   Strings.resx
+  Strings.Designer.cs
 ```
 
 Only the base `Strings.resx` file is planned for now.
 Do not add culture-specific files such as `Strings.ru.resx` unless the developer explicitly decides to add another UI language later.
+Use the standard Visual Studio `.resx` strong-typed resource workflow:
+
+- `Strings.Designer.cs` should be generated from `Strings.resx`.
+- The resource file should use `PublicResXFileCodeGenerator`.
+- The project file should keep the `.resx` and `.Designer.cs` metadata linked with `LastGenOutput`, `AutoGen`, `DesignTime`, and `DependentUpon`.
+- Do not write a custom hand-made `ResourceManager` wrapper for these strings.
 
 The base resource language is English because the specification screenshots use English UI text.
 
