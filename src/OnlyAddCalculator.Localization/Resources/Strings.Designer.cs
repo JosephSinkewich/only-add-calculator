@@ -61,7 +61,7 @@ namespace OnlyAddCalculator.Localization.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Only Add Calculator.
+        ///   Ищет локализованную строку, похожую на ONLY ADD CALCULATOR.
         /// </summary>
         public static string AppTitle {
             get {
@@ -70,7 +70,7 @@ namespace OnlyAddCalculator.Localization.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Error.
+        ///   Ищет локализованную строку, похожую на ERROR.
         /// </summary>
         public static string HistoryErrorResult {
             get {
@@ -79,7 +79,8 @@ namespace OnlyAddCalculator.Localization.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Please check the information you just entered..
+        ///   Ищет локализованную строку, похожую на Please check the expression
+        ///you just entered.
         /// </summary>
         public static string InvalidInputMessage {
             get {
@@ -88,7 +89,16 @@ namespace OnlyAddCalculator.Localization.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Result.
+        ///   Ищет локализованную строку, похожую на GOT IT.
+        /// </summary>
+        public static string InvalidInputButtonText {
+            get {
+                return ResourceManager.GetString("InvalidInputButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на RESULT.
         /// </summary>
         public static string ResultButtonText {
             get {
