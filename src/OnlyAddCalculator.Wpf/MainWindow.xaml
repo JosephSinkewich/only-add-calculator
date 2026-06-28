@@ -3,10 +3,95 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OnlyAddCalculator.Wpf"
+        xmlns:resources="clr-namespace:OnlyAddCalculator.Localization.Resources;assembly=OnlyAddCalculator.Localization"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="{x:Static resources:Strings.AppTitle}"
+        SizeToContent="WidthAndHeight"
+        Background="White"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Loaded="HandleLoaded"
+        Closing="HandleClosing">
+    <Window.Resources>
+        <sys:Double x:Key="HistoryItemHeight">26</sys:Double>
+        <sys:Double x:Key="HistoryMaxHeight">182</sys:Double>
+        <SolidColorBrush x:Key="InputUnderlineFocusedBrush" Color="#1E9BFF" />
+        <SolidColorBrush x:Key="InputUnderlineIdleBrush" Color="#BDBDBD" />
+    </Window.Resources>
 
-    </Grid>
+    <Border Width="314"
+            MinHeight="178"
+            Padding="22,25,22,25"
+            Background="White">
+        <StackPanel>
+            <Grid Height="32"
+                  Margin="0">
+                <TextBox x:Name="InputTextBox"
+                         Padding="2,0,2,1"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         FontFamily="Arial"
+                         FontSize="16"
+                         Foreground="#1D2B3A"
+                         VerticalContentAlignment="Center"
+                         TextChanged="HandleInputTextChanged" />
+
+                <TextBlock x:Name="InputPlaceholderTextBlock"
+                           Margin="2,0,0,1"
+                           FontFamily="Arial"
+                           FontSize="16"
+                           FontStyle="Italic"
+                           Foreground="#8D8D8D"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           Text="Enter an equation..." />
+
+                <Border Height="2"
+                        VerticalAlignment="Bottom">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{StaticResource InputUnderlineIdleBrush}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsKeyboardFocusWithin, ElementName=InputTextBox}" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource InputUnderlineFocusedBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+
+            <ScrollViewer x:Name="HistoryScrollViewer"
+                          Margin="0,7,0,0"
+                          MaxHeight="{StaticResource HistoryMaxHeight}"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="HistoryItemsControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Height="{StaticResource HistoryItemHeight}"
+                                       FontFamily="Arial"
+                                       FontSize="16"
+                                       Foreground="#1E9BFF"
+                                       TextAlignment="Right"
+                                       Text="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Button x:Name="ResultButton"
+                    Height="43"
+                    Margin="0,28,0,0"
+                    Background="#4DAFEE"
+                    BorderThickness="0"
+                    Click="HandleResultButtonClick"
+                    Content="{x:Static resources:Strings.ResultButtonText}"
+                    FontFamily="Arial"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="White" />
+        </StackPanel>
+    </Border>
 </Window>
