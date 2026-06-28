@@ -65,6 +65,7 @@
             <ScrollViewer x:Name="HistoryScrollViewer"
                           Margin="0,7,0,0"
                           MaxHeight="{StaticResource HistoryMaxHeight}"
+                          Padding="0,0,16,0"
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl x:Name="HistoryItemsControl">
